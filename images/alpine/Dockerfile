@@ -6,7 +6,12 @@ RUN apk add \
         openssh \
         udev \
         bash
+        
+RUN apk add openrc        
 
+RUN sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
+  && echo "root:root" | chpasswd
+  
 COPY mount-pts.sh /etc/init.d/devpts
 RUN rc-update add sshd && \
     rc-update add udev && \
